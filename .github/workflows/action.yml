@@ -34,9 +34,9 @@ on:
         type: boolean
         default: false
     secrets:
-      NPM_TOKEN:
+      RELEASE_NPM_TOKEN:
         required: false
-      GITHUB_TOKEN:
+      RELEASE_GITHUB_TOKEN:
         required: false
 env:
   HUSKY: 0
@@ -104,16 +104,16 @@ jobs:
         if: ${{ inputs.release && inputs.dry-run == 'true' }}
         working-directory: ${{ inputs.working-directory }}
         env:
-            NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-            NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            NODE_AUTH_TOKEN: ${{ secrets.RELEASE_NPM_TOKEN }}
+            NPM_TOKEN: ${{ secrets.RELEASE_NPM_TOKEN }}
+            GITHUB_TOKEN: ${{ secrets.RELEASE_GITHUB_TOKEN }}
         run: npm run release-dry-run
 
       - name: Release
         if: ${{ inputs.release && inputs.dry-run == 'false' }}
         working-directory: ${{ inputs.working-directory }}
         env:
-            NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-            NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            NODE_AUTH_TOKEN: ${{ secrets.RELEASE_NPM_TOKEN }}
+            NPM_TOKEN: ${{ secrets.RELEASE_NPM_TOKEN }}
+            GITHUB_TOKEN: ${{ secrets.RELEASE_GITHUB_TOKEN }}
         run: npm run release
