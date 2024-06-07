@@ -1,0 +1,107 @@
+on:
+  workflow_call:
+    inputs:
+      working-directory:
+        description: The working directory of where to run the commands.
+        type: string
+        required: true
+      runs-on:
+        description: Type(s) of machine to run the job on.
+        type: string
+        default: '["ubuntu-latest"]'
+      node-versions:
+        description: Node version(s) to be used.
+        type: string
+        default: '[20]'
+      lint:
+        description: Whether to run the command `npm run lint`.
+        type: boolean
+        default: true
+      test:
+        description: Whether to run the command `npm run test:ci`.
+        type: boolean
+        default: true
+      build:
+        description: Whether to run the command `npm run build`.
+        type: boolean
+        default: false
+      release:
+        description: Whether to run the command `npm run release`.
+        type: boolean
+        default: false
+      dry-run:
+        description: Whether to run the command `npm run release:dry-run`.
+        type: boolean
+        default: false
+
+env:
+  HUSKY: 0
+
+jobs:
+  ci_job:
+    strategy:
+      matrix:
+        os: ${{ fromJson(inputs.runs-on) }}
+        node: ${{ fromJson(inputs.node-versions) }}
+
+    name: Running on ${{ matrix.os }} node${{ matrix.node }}
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v4
+
+      - name: Setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+          registry-url: https://registry.npmjs.org/
+          cache: npm
+
+      # https://github.com/actions/setup-node/issues/411
+      # https://github.com/npm/cli/issues/4341
+      - name: Workaround for npm installation on Windows
+        if: ${{ matrix.os == 'windows-latest' }}
+        run: npm install -g npm@8.3.1
+
+      - name: Install latest npm
+        run: npm install -g npm@latest
+
+      - name: Cache .angular and node_modules
+        uses: actions/cache@v4
+        id: cache-step
+        with:
+          key: cache-${{ matrix.os }}-node${{ matrix.node }}-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            cache-${{ matrix.os }}-node${{ matrix.node }}-
+          path: |
+            .angular/cache
+            node_modules
+
+      - name: Install dependencies
+        if: steps.cache-step.outputs.cache-hit != 'true'
+        run: npm clean-install --engine-strict
+
+      - name: Lint
+        if: ${{ inputs.lint }}
+        working-directory: ${{ inputs.working-directory }}
+        run: npm run lint
+
+      - name: Test
+        if: ${{ inputs.test }}
+        working-directory: ${{ inputs.working-directory }}
+        run: npm run test:ci
+
+      - name: Build
+        if: ${{ inputs.build || inputs.release }}
+        working-directory: ${{ inputs.working-directory }}
+        run: npm run build
+
+      - name: Release (dry-run)
+        if: ${{ inputs.release && inputs.dry-run == 'true' }}
+        working-directory: ${{ inputs.working-directory }}
+        run: npm run release-dry-run
+
+      - name: Release
+        if: ${{ inputs.release && inputs.dry-run == 'false' }}
+        working-directory: ${{ inputs.working-directory }}
+        run: npm run release
