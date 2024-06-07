@@ -101,7 +101,7 @@ jobs:
         run: npm run build
 
       - name: Release (dry-run)
-        if: ${{ inputs.release && inputs.dry-run == 'true' }}
+        if: ${{ inputs.release && inputs.dry-run }}
         working-directory: ${{ inputs.working-directory }}
         env:
             NODE_AUTH_TOKEN: ${{ secrets.RELEASE_NPM_TOKEN }}
@@ -110,7 +110,7 @@ jobs:
         run: npm run release-dry-run
 
       - name: Release
-        if: ${{ inputs.release && inputs.dry-run == 'false' }}
+        if: ${{ inputs.release && !inputs.dry-run }}
         working-directory: ${{ inputs.working-directory }}
         env:
             NODE_AUTH_TOKEN: ${{ secrets.RELEASE_NPM_TOKEN }}
