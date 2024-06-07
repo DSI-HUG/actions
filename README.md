@@ -8,7 +8,7 @@
         <img src="https://cdn.hug.ch/svgs/hug/hug-logo-horizontal.svg" alt="hug-logo" height="54px" />
     </a>
     <br/><br/>
-    <i>Github action mainly designed to be used by the <a href="https://github.com/dsi-hug">HUG organization's team</a></i>
+    <i>Reusable Github workflow mainly designed to be used by the <a href="https://github.com/dsi-hug">HUG organization's team</a></i>
     <br/><br/>
 </p>
 
@@ -39,13 +39,13 @@ It will also apply a matrix strategy to run them on different types of machine a
 
 See [action.yml](action.yml)
 ```yaml
-- uses: dsi-hug/action@v1
+- uses: dsi-hug/action/.github/workflows/action.yml@v1
   with:
     #
     # The working directory of where to run the commands.
     #
     # @required
-    # 
+    #
     working-directory: ''
 
     #
@@ -53,7 +53,7 @@ See [action.yml](action.yml)
     #
     # @see: https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#choosing-github-hosted-runners
     # @default: '["ubuntu-latest"]'
-    # 
+    #
     runs-on: '["ubuntu-latest"]'
 
     #
@@ -68,60 +68,62 @@ See [action.yml](action.yml)
     # Whether to run the command `npm run lint`.
     #
     # @default: true
-    # 
+    #
     lint: true
 
     #
     # Whether to run the command `npm run test:ci`.
     #
     # @default: true
-    # 
+    #
     test: true
 
     #
     # Whether to run the command `npm run build`.
     #
     # @default: false
-    # 
+    #
     build: false
 
     #
     # Whether to run the command `npm run release`.
-    # 
+    #
     #
     # @default: false
-    # 
+    #
     release: false
 
     #
     # Whether to run the command `npm run release:dry-run`.
     #
     # @default: false
-    # 
+    #
     dry-run: false
 ```
 
 ## Examples
 1. Runs `lint` and `test` jobs on a desired project, with specific `platforms` and `node versions`.
-   
+
    ```yaml
-   - name: Test
-     uses: dsi-hug/action@v1
-     with:
-       working-directory: projects/package-a
-       runs-on: '["ubuntu-latest", "macos-latest", "windows-latest"]'
-       node-versions: '[18, 20]'
+   jobs:
+     ci_test:
+       uses: dsi-hug/action/.github/workflows/action.yml@v1
+       with:
+         working-directory: projects/package-a
+         runs-on: '["ubuntu-latest", "macos-latest", "windows-latest"]'
+         node-versions: '[18, 20]'
    ```
 2. Runs `lint`, `test`, `build` and `release` jobs on a desired project.
-   
+
    ```yaml
-   - name: Release
-     uses: dsi-hug/action@v1
-     env:
-       NODE_AUTH_TOKEN: ${{ secrets.YOUR_NPM_TOKEN }}
-     with:
-       working-directory: projects/package-a
-       release: true
+   jobs:
+     ci_release:
+       uses: dsi-hug/action/.github/workflows/action.yml@v1
+       env:
+         NODE_AUTH_TOKEN: ${{ secrets.YOUR_NPM_TOKEN }}
+       with:
+         working-directory: projects/package-a
+         release: true
    ```
 
 ## Credits
