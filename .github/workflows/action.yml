@@ -63,6 +63,11 @@ jobs:
           registry-url: https://registry.npmjs.org/
           cache: npm
 
+      - name: Setup git user
+        run: |
+          git config user.name ${{ github.actor }}
+          git config user.email '${{ github.actor }}@users.noreply.github.com'
+
       # https://github.com/actions/setup-node/issues/411
       # https://github.com/npm/cli/issues/4341
       - name: Workaround for npm installation on Windows
