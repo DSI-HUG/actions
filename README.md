@@ -87,7 +87,7 @@ See [action.yml](action.yml)
 
     #
     # Whether to run the command `npm run release`.
-    # If required, tokens such as RELEASE_NPM_TOKEN and RELEASE_GITHUB_TOKEN can be passed as secrets.
+    # If required, tokens such as NPM_TOKEN and GH_TOKEN can be passed as secrets.
     #
     # @default: false
     #
@@ -95,7 +95,7 @@ See [action.yml](action.yml)
 
     #
     # Whether to run the command `npm run release:dry-run`.
-    # If required, tokens such as RELEASE_NPM_TOKEN and RELEASE_GITHUB_TOKEN can be passed as secrets.
+    # If required, tokens such as NPM_TOKEN and GH_TOKEN can be passed as secrets.
     #
     # @default: false
     #
@@ -121,8 +121,10 @@ See [action.yml](action.yml)
      ci_release:
        uses: dsi-hug/action/.github/workflows/action.yml@v1
        secrets:
-         RELEASE_NPM_TOKEN: ${{ secrets.YOUR_NPM_TOKEN }}
-         RELEASE_GITHUB_TOKEN: ${{ secrets.YOUR_GITHUB_TOKEN }}
+         GH_USER_NAME: 'dsi-hug-bot'
+         GH_USER_EMAIL: 'dsi-hug-bot@users.noreply.github.com'
+         GH_TOKEN: ${{ secrets.YOUR_GITHUB_TOKEN }}
+         NPM_TOKEN: ${{ secrets.YOUR_NPM_TOKEN }}
        with:
          working-directory: projects/package-a
          release: true
