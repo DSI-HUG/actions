@@ -71,14 +71,18 @@ jobs:
           registry-url: https://registry.npmjs.org/
           cache: npm
 
-      - name: Setup git user
+      # https://github.com/actions/checkout/issues/664
+      - name: Setup git
         shell: bash
         run: |
           git config user.name ${{ secrets.GH_USER_NAME || github.actor }}
-          if [ -z "${{ secrets.GH_USER_EMAIL }}" ]; then
-            git config user.email ${{ github.actor }}@users.noreply.github.com
-          else
+          if [ "${{ secrets.GH_USER_EMAIL }}" ]; then
             git config user.email ${{ secrets.GH_USER_EMAIL }}
+          else
+            git config user.email ${{ github.actor }}@users.noreply.github.com
+          fi
+          if [ "${{ secrets.GH_TOKEN }}" ]; then
+            git remote set-url origin https://x-access-token:${{ secrets.GH_TOKEN }}@github.com/${{ github.repository }}
           fi
 
       # https://github.com/actions/setup-node/issues/411
