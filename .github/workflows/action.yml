@@ -72,6 +72,7 @@ jobs:
           cache: npm
 
       - name: Setup git user
+        shell: bash
         run: |
           git config user.name ${{ secrets.GH_USER_NAME || github.actor }}
           if [ -z "${{ secrets.GH_USER_EMAIL }}" ]; then
