@@ -45,6 +45,7 @@ on:
 
 env:
   HUSKY: 0
+  FORCE_COLOR: 3
 
 jobs:
   ci_job:
