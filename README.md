@@ -44,9 +44,9 @@ See [action.yml](action.yml)
     #
     # The working directory of where to run the commands.
     #
-    # @required
+    # @default: '.'
     #
-    working-directory: ''
+    working-directory: '.'
 
     #
     # Type(s) of machine to run the job on.

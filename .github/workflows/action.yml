@@ -4,7 +4,7 @@ on:
       working-directory:
         description: The working directory of where to run the commands.
         type: string
-        required: true
+        default: '.'
       runs-on:
         description: Type(s) of machine to run the job on.
         type: string
