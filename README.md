@@ -67,16 +67,16 @@ See [action.yml](action.yml)
     #
     # Whether to run the command `npm run lint`.
     #
-    # @default: true
+    # @default: false
     #
-    lint: true
+    lint: false
 
     #
     # Whether to run the command `npm run test:ci`.
     #
-    # @default: true
+    # @default: false
     #
-    test: true
+    test: false
 
     #
     # Whether to run the command `npm run build`.
@@ -112,7 +112,9 @@ See [action.yml](action.yml)
        with:
          working-directory: projects/package-a
          runs-on: '["ubuntu-latest", "macos-latest", "windows-latest"]'
-         node-versions: '[18, 20]'
+         node-versions: '[18, 20]',
+         lint: true,
+         test: true
    ```
 2. Runs `lint`, `test`, `build` and `release` jobs on a desired project.
 
@@ -127,6 +129,8 @@ See [action.yml](action.yml)
          NPM_TOKEN: ${{ secrets.YOUR_NPM_TOKEN }}
        with:
          working-directory: projects/package-a
+         lint: true,
+         test: true,
          release: true
    ```
 
