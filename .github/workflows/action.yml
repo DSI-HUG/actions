@@ -13,6 +13,10 @@ on:
         description: Node version(s) to be used.
         type: string
         default: '[20]'
+      node-arch:
+        description: Node architecture to be used.
+        type: string
+        default: ''
       setup-chrome:
         description: Whether to install the latest Chrome version.
         type: boolean
@@ -72,6 +76,7 @@ jobs:
           GIT_USER_EMAIL: ${{ secrets.GIT_USER_EMAIL }}
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
           node-version: ${{ matrix.node }}
+          node-arch: ${{ inputs.node-arch }}
           setup-chrome: ${{ inputs.setup-chrome }}
 
       - name: Lint

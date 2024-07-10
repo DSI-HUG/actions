@@ -63,6 +63,14 @@ jobs.<job_id>.steps[*]:
       node-version: 20
 
       #
+      # Node architecture to be used.
+      #
+      # @examples: x86, x64
+      # @default: '', use system architecture by default
+      #
+      node-arch: ''
+
+      #
       # Whether to install the latest Chrome version.
       #
       # @default: false
@@ -97,6 +105,14 @@ jobs.<job_id>:
     # @default: '[20]'
     #
     node-versions: '[20]'
+
+    #
+    # Node architecture to be used.
+    #
+    # @examples: x86, x64
+    # @default: '', use system architecture by default
+    #
+    node-arch: ''
 
     #
     # Whether to install the latest Chrome version.
