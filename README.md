@@ -21,25 +21,59 @@
 
 <hr/>
 
-This github action will run the following steps in order:
-1. `Checkout sources`
-2. `Setup node`
-3. `Install latest npm`
-4. `Cache .angular and node_modules`
-5. `Install dependencies`
-6. `Lint` *(optional)*
-7. `Test` *(optional)*
-8. `Build` *(optional)*
-9. `Release dry-run` *(optional)*
-10. `Release` *(optional)*
+The following workflows are available:
 
-It will also apply a matrix strategy to run them on different types of machine and node versions.
+#### - Setup
+Runs the following steps in order:
+```
+1. Checkout sources
+2. Setup chrome (optional)
+3. Setup git
+4. Setup node
+5. Setup npm
+6. Cache .angular and node_modules
+7. Install npm dependencies
+```
+
+#### - Action
+Runs the following steps in order and also apply a matrix strategy to run them on different types of machine and node versions:
+```md
+1. Run the setup workflow
+2. Lint (optional)
+3. Test (optional)
+4. Build (optional)
+5. Release dry-run (optional)
+6. Release (optional)
+```
 
 ## Usage
 
-See [action.yml](action.yml)
+### [dsi-hug/actions/setup](./setup/action.yml)
 ```yaml
-- uses: dsi-hug/action/.github/workflows/action.yml@v1
+jobs.<job_id>.steps[*]:
+  - name: Setup
+    uses: dsi-hug/actions/setup@v2
+    with:
+      #
+      # Node version to be used.
+      #
+      # @examples: 18, '12.x', '10.15.1', '>=10.15.0', 'lts/Hydrogen', '16-nightly', 'latest', 'node'
+      # @default: 20
+      #
+      node-version: 20
+
+      #
+      # Whether to install the latest Chrome version.
+      #
+      # @default: false
+      #
+      setup-chrome: false
+```
+
+### [dsi-hug/actions/.github/workflows/action.yml](./.github/workflows/action.yml)
+```yaml
+jobs.<job_id>:
+  uses: dsi-hug/actions/.github/workflows/action.yml@v2
   with:
     #
     # The working directory of where to run the commands.
@@ -63,6 +97,13 @@ See [action.yml](action.yml)
     # @default: '[20]'
     #
     node-versions: '[20]'
+
+    #
+    # Whether to install the latest Chrome version.
+    #
+    # @default: false
+    #
+    setup-chrome: false
 
     #
     # Whether to run the command `npm run lint`.
@@ -103,12 +144,27 @@ See [action.yml](action.yml)
 ```
 
 ## Examples
-1. Runs `lint` and `test` jobs on a desired project, with specific `platforms` and `node versions`.
+1. Setup everything on a project and runs e2e tests.
 
    ```yaml
    jobs:
-     ci_test:
-       uses: dsi-hug/action/.github/workflows/action.yml@v1
+     ci_e2e:
+       runs-on: ubuntu-latest
+       steps:
+         - name: Setup
+           uses: dsi-hug/actions/setup@v2
+           with:
+             - setup-chrome: true
+         - name: Run e2e tests
+           run: ...
+   ```
+
+2. Runs `lint` and `test` jobs on a desired project, with specific `platforms` and `node versions`.
+
+   ```yaml
+   jobs:
+     ci_tests:
+       uses: dsi-hug/actions/.github/workflows/action.yml@v2
        with:
          working-directory: projects/package-a
          runs-on: '["ubuntu-latest", "macos-latest", "windows-latest"]'
@@ -116,15 +172,16 @@ See [action.yml](action.yml)
          lint: true,
          test: true
    ```
-2. Runs `lint`, `test`, `build` and `release` jobs on a desired project.
+
+3. Runs `lint`, `test`, `build` and `release` jobs on a desired project.
 
    ```yaml
    jobs:
      ci_release:
-       uses: dsi-hug/action/.github/workflows/action.yml@v1
+       uses: dsi-hug/actions/.github/workflows/action.yml@v2
        secrets:
-         GH_USER_NAME: 'dsi-hug-bot'
-         GH_USER_EMAIL: 'dsi-hug-bot@users.noreply.github.com'
+         GIT_USER_NAME: 'dsi-hug-bot'
+         GIT_USER_EMAIL: 'dsi-hug-bot@users.noreply.github.com'
          GH_TOKEN: ${{ secrets.YOUR_GITHUB_TOKEN }}
          NPM_TOKEN: ${{ secrets.YOUR_NPM_TOKEN }}
        with:
