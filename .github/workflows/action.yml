@@ -13,6 +13,10 @@ on:
         description: Node version(s) to be used.
         type: string
         default: '[20]'
+      setup-chrome:
+        description: Whether to install the latest Chrome version.
+        type: boolean
+        default: false
       lint:
         description: Whether to run the command `npm run lint`.
         type: boolean
@@ -34,13 +38,17 @@ on:
         type: boolean
         default: false
     secrets:
-      GH_USER_NAME:
+      GIT_USER_NAME:
+        description: Username to be used for Git configuration.
         required: false
-      GH_USER_EMAIL:
+      GIT_USER_EMAIL:
+        description: Email to be used for Git configuration.
         required: false
       GH_TOKEN:
+        description: GitHub token to be used for Git operations.
         required: false
       NPM_TOKEN:
+        description: Npm token to be used for release operations.
         required: false
 
 env:
@@ -54,64 +62,17 @@ jobs:
         os: ${{ fromJson(inputs.runs-on) }}
         node: ${{ fromJson(inputs.node-versions) }}
 
-    name: Running on ${{ matrix.os }} node${{ matrix.node }}
+    name: ${{ matrix.os }}_node${{ matrix.node }}
     runs-on: ${{ matrix.os }}
     steps:
-      - name: Checkout sources
-        uses: actions/checkout@v4
+      - name: Setup
+        uses: ./setup
         with:
-            # https://github.com/semantic-release/semantic-release/issues/2636
-            persist-credentials: false
-            # Nx recommmendation to ensure all Git history is available for Nx to evaluate
-            fetch-depth: 0
-
-      - name: Setup node
-        uses: actions/setup-node@v4
-        with:
+          GIT_USER_NAME: ${{ secrets.GIT_USER_NAME }}
+          GIT_USER_EMAIL: ${{ secrets.GIT_USER_EMAIL }}
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
           node-version: ${{ matrix.node }}
-          registry-url: https://registry.npmjs.org/
-          cache: npm
-
-      # https://github.com/actions/checkout/issues/664
-      - name: Setup git
-        shell: bash
-        run: |
-          git config user.name ${{ secrets.GH_USER_NAME || github.actor }}
-          if [ "${{ secrets.GH_USER_EMAIL }}" ]; then
-            git config user.email ${{ secrets.GH_USER_EMAIL }}
-          else
-            git config user.email ${{ github.actor }}@users.noreply.github.com
-          fi
-          if [ "${{ secrets.GH_TOKEN }}" ]; then
-            git remote set-url origin https://x-access-token:${{ secrets.GH_TOKEN }}@github.com/${{ github.repository }}
-          fi
-
-      # https://github.com/actions/setup-node/issues/411
-      # https://github.com/npm/cli/issues/4341
-      - name: Workaround for npm installation on Windows
-        if: ${{ matrix.os == 'windows-latest' }}
-        run: npm install -g npm@8.3.1
-
-      - name: Install latest npm
-        run: |
-          npm install -g npm@latest
-          npm --version
-          npm config list -l
-
-      - name: Cache .angular and node_modules
-        uses: actions/cache@v4
-        id: cache-step
-        with:
-          key: cache-${{ matrix.os }}-node${{ matrix.node }}-${{ hashFiles('package-lock.json') }}
-          restore-keys: |
-            cache-${{ matrix.os }}-node${{ matrix.node }}-
-          path: |
-            .angular/cache
-            node_modules
-
-      - name: Install dependencies
-        if: steps.cache-step.outputs.cache-hit != 'true'
-        run: npm clean-install --engine-strict
+          setup-chrome: ${{ inputs.setup-chrome }}
 
       - name: Lint
         if: ${{ inputs.lint }}

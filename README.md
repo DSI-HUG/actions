@@ -1,5 +1,5 @@
 <h1 align="center">
-    dsi-hug/action
+    dsi-hug/actions
 </h1>
 
 <p align="center">
@@ -8,7 +8,7 @@
         <img src="https://cdn.hug.ch/svgs/hug/hug-logo-horizontal.svg" alt="hug-logo" height="54px" />
     </a>
     <br/><br/>
-    <i>Reusable Github workflow mainly designed to be used by the <a href="https://github.com/dsi-hug">HUG organization's team</a></i>
+    <i>Reusable Github workflows mainly designed to be used by the <a href="https://github.com/dsi-hug">HUG organization's team</a></i>
     <br/><br/>
 </p>
 
