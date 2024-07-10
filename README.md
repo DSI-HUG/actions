@@ -184,8 +184,8 @@ jobs.<job_id>:
        with:
          working-directory: projects/package-a
          runs-on: '["ubuntu-latest", "macos-latest", "windows-latest"]'
-         node-versions: '[18, 20]',
-         lint: true,
+         node-versions: '[18, 20]'
+         lint: true
          test: true
    ```
 
@@ -202,8 +202,9 @@ jobs.<job_id>:
          NPM_TOKEN: ${{ secrets.YOUR_NPM_TOKEN }}
        with:
          working-directory: projects/package-a
-         lint: true,
-         test: true,
+         lint: true
+         test: true
+         build: true
          release: true
    ```
 
