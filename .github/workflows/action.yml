@@ -90,7 +90,7 @@ jobs:
         run: npm run test:ci
 
       - name: Build
-        if: ${{ inputs.build || inputs.release }}
+        if: ${{ inputs.build }}
         working-directory: ${{ inputs.working-directory }}
         run: npm run build
 
