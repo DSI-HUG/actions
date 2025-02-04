@@ -52,7 +52,7 @@ Runs the following steps in order and also apply a matrix strategy to run them o
 ```yaml
 jobs.<job_id>.steps[*]:
   - name: Setup
-    uses: dsi-hug/actions/setup@v2
+    uses: dsi-hug/actions/setup@v3
     with:
       #
       # Node version to be used.
@@ -81,7 +81,7 @@ jobs.<job_id>.steps[*]:
 ### [dsi-hug/actions/.github/workflows/action.yml](./.github/workflows/action.yml)
 ```yaml
 jobs.<job_id>:
-  uses: dsi-hug/actions/.github/workflows/action.yml@v2
+  uses: dsi-hug/actions/.github/workflows/action.yml@v3
   with:
     #
     # The working directory of where to run the commands.
@@ -168,7 +168,7 @@ jobs.<job_id>:
        runs-on: ubuntu-latest
        steps:
          - name: Setup
-           uses: dsi-hug/actions/setup@v2
+           uses: dsi-hug/actions/setup@v3
            with:
              - setup-chrome: true
          - name: Run e2e tests
@@ -180,7 +180,7 @@ jobs.<job_id>:
    ```yaml
    jobs:
      ci_tests:
-       uses: dsi-hug/actions/.github/workflows/action.yml@v2
+       uses: dsi-hug/actions/.github/workflows/action.yml@v3
        with:
          working-directory: projects/package-a
          runs-on: '["ubuntu-latest", "macos-latest", "windows-latest"]'
@@ -194,7 +194,7 @@ jobs.<job_id>:
    ```yaml
    jobs:
      ci_release:
-       uses: dsi-hug/actions/.github/workflows/action.yml@v2
+       uses: dsi-hug/actions/.github/workflows/action.yml@v3
        secrets:
          GIT_USER_NAME: 'dsi-hug-bot'
          GIT_USER_EMAIL: 'dsi-hug-bot@users.noreply.github.com'

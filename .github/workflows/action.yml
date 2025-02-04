@@ -70,7 +70,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - name: Setup
-        uses: dsi-hug/actions/setup@v2
+        uses: dsi-hug/actions/setup@v3
         with:
           GIT_USER_NAME: ${{ secrets.GIT_USER_NAME }}
           GIT_USER_EMAIL: ${{ secrets.GIT_USER_EMAIL }}
