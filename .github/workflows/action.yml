@@ -12,7 +12,7 @@ on:
       node-versions:
         description: Node version(s) to be used.
         type: string
-        default: '[20]'
+        default: '[22]'
       node-arch:
         description: Node architecture to be used.
         type: string

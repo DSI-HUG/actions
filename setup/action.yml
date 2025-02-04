@@ -9,7 +9,7 @@ inputs:
   node-version:
     description: Node version to be used.
     type: string
-    default: 20
+    default: 22
   node-arch:
     description: Node architecture to be used.
     type: string
