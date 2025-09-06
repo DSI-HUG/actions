@@ -68,7 +68,8 @@ runs:
       run: |
         wget -q https://dl.google.com/chrome/mac/universal/stable/GGRO/googlechrome.dmg
         hdiutil attach -quiet -noautofsck -noautoopen googlechrome.dmg
-        sudo cp -r /Volumes/Google\ Chrome/Google\ Chrome.app /Applications/
+        sudo rm -rf "/Applications/Google Chrome.app"
+        sudo ditto "/Volumes/Google Chrome/Google Chrome.app" "/Applications/Google Chrome.app"
 
     # https://github.com/actions/checkout/issues/664
     - name: Setup git
