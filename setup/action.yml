@@ -89,12 +89,13 @@ runs:
         registry-url: https://registry.npmjs.org/
         cache: npm
 
-    # https://github.com/actions/setup-node/issues/411
-    # https://github.com/npm/cli/issues/4341
-    - name: Workaround for npm installation on Windows
-      if: ${{ runner.os == 'Windows' }}
+    # https://github.com/nodejs/node/issues/62425
+    # https://github.com/npm/cli/issues/9151
+    # https://github.com/npm/cli/pull/9152
+    - name: Workaround for npm installation on Node22
+      if: ${{ inputs.node-version == '22' }}
       shell: bash
-      run: npm install -g npm@8.3.1
+      run: npm install -g npm@~11.10.0
 
     - name: Setup npm
       shell: bash
