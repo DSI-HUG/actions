@@ -28,10 +28,6 @@ inputs:
     description: GitHub token to be used for Git operations.
     required: false
 
-env:
-  HUSKY: 0
-  FORCE_COLOR: 3
-
 runs:
   using: 'composite'
   steps:
