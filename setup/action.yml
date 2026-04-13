@@ -32,7 +32,7 @@ runs:
   using: 'composite'
   steps:
     - name: Checkout sources
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6
       with:
         # https://github.com/semantic-release/semantic-release/issues/2636
         persist-credentials: false
@@ -82,7 +82,7 @@ runs:
         fi
 
     - name: Setup node
-      uses: actions/setup-node@v4
+      uses: actions/setup-node@v6
       with:
         node-version: ${{ inputs.node-version }}
         architecture: ${{ inputs.node-arch }}
@@ -104,7 +104,7 @@ runs:
         npm config list -l
 
     - name: Cache .angular and node_modules
-      uses: actions/cache@v4
+      uses: actions/cache@v5
       id: cache-step
       with:
         key: cache-${{ runner.os }}-node${{ inputs.node-version }}-${{ hashFiles('package-lock.json') }}
